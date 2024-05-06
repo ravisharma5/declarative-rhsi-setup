@@ -217,7 +217,7 @@ Now we will enable skupper sites on both clusters
 ```bash
 oc apply -f frontend-site.yaml
 ```
-backend-site.yaml
+frontend-site.yaml
 ```yaml
 apiVersion: v1
 kind: ConfigMap
@@ -238,7 +238,7 @@ Using webterminal or your own cli or via skupper console you can verify the site
 ```bash
 oc apply -f backend-site.yaml
 ```
-frontend-site.yaml
+backend-site.yaml
 ```yaml
 apiVersion: v1
 kind: ConfigMap
