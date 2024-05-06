@@ -26,8 +26,10 @@ Below we will create a project/namespace, deployment, service, and a route to ac
 ```bash
 oc apply -f frontend.yaml
 ```
+<details>
 
-contents of frontend.yaml 
+<summary>Contents of frontend.yaml </summary>
+
 ```yaml
 ---
 apiVersion: project.openshift.io/v1
@@ -111,6 +113,7 @@ spec:
     weight: 100
   wildcardPolicy: None
 ```
+</details>
 
 #### Deploy Backend app to cluster B. 
 Below we will create a project/namespace, deployment, service, and a route to access the backend app.
@@ -119,8 +122,10 @@ Deploy Backend app to cluster B
 ```bash
 oc apply -f backend.yaml
 ```
+<details>
+    
+<summary>Contents of backend.yaml </summary> 
 
-contents of backend.yaml 
 ```yaml
 ---
 apiVersion: project.openshift.io/v1
@@ -160,7 +165,7 @@ spec:
       containers:
       - image: quay.io/skupper/hello-world-backend
         imagePullPolicy: Always
-        name: hello-world-frontend
+        name: hello-world-backend
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
@@ -204,6 +209,7 @@ spec:
     weight: 100
   wildcardPolicy: None
 ```
+</details>
 
 ## Create Skupper sites with a config map
 Now we will enable skupper sites on both clusters
