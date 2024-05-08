@@ -231,7 +231,7 @@ data:
   flow-collector: "true"
 ```
 
-Using webterminal or your own cli or via skupper console you can verify the site deployment. The skupper route will be available under the networking>route section of the console.
+Using webterminal or your own cli or via skupper console you can verify the site deployment. The skupper route will be available under the networking>route section of the console for frontend project.
 
 #### Apply Backend skupper configmap to enable site
 
@@ -254,4 +254,46 @@ data:
 
 ## Create Token and link sites
 
-## Exposing services to the service network created by Skupper
+#### Let's create a secret with a token on the Frontend Cluster
+```bash
+oc apply -f frontend-token-config.yaml
+```
+
+<details>
+<summary>
+    frontend-token-config.yaml
+</summary>
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: frontend-token-config
+  labels:
+    skupper.io/type: connection-token-request
+```
+</details>
+
+#### Extract the token from the secret...
+
+```bash
+oc get secret -o yaml frontend-token-config | yq 'del(.metadata.namespace)' > frontend-token.yaml
+```
+#### and then apply the same token to the backend cluster after login into the backend cluster and switching to backend project
+
+```bash
+oc project backend
+oc apply -f frontend-token.yaml
+```
+
+## Exposing services to the service network created by Skupper.
+
+Annotate the backend deployment to create a service that can communicate on the skupper service network:
+```bash
+oc annotate deployment backend "skupper.io/address=backend" "skupper.io/port=8080" "skupper.io/proxy=tcp"
+```
+
+Now, you can verify if links are connected using skupper console if that is enabled or using ```skupper link status``` command. Access frontend url and send message to verify if your frontend cluster is able to talk to backend cluster.
+
+
+
